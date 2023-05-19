@@ -1,0 +1,40 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    id 'java'
+}
+
+group = 'de.cacheoverflow'
+version = '1.0.0'
+archivesBaseName = "rustyfabric"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+}
+
+gradlePlugin {
+    plugins {
+        rustcraftGradlePlugin {
+            id = 'rustyfabric'
+            implementationClass = 'de.cacheoverflow.rustyfabric.plugin.RustyFabricGradlePlugin'
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
+}
