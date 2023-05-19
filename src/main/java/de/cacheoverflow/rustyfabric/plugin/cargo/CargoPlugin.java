@@ -7,6 +7,8 @@ import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskContainer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class CargoPlugin implements Plugin<Project> {
 
     private static final String TASK_GROUP = "cargo";
@@ -15,22 +17,23 @@ public class CargoPlugin implements Plugin<Project> {
     public void apply(@NotNull final Project project) {
         CargoPluginExtension extension = project.getExtensions().create("cargo", CargoPluginExtension.class, project);
         TaskContainer tasks = project.getTasks();
-        this.addCargoTask(tasks, "cargoUpdate", CargoUpdateTask.class, extension);
-        this.addCargoTask(tasks, "cargoBuild", CargoBuildTask.class, extension);
-        this.addCargoTask(tasks, "cargoClean", CargoCleanTask.class, extension);
-        this.addCargoTask(tasks, "cargoTest", CargoTestTask.class, extension);
-
         tasks.register("cargoInit", CargoInitTask.class, task -> {
             task.setGroup(CargoPlugin.TASK_GROUP);
             task.getSourceFolder().set(extension.getSourceFolder());
             task.getWorkingFolder().set(extension.getWorkingFolder());
         });
+
+        this.addCargoTask(tasks, "cargoUpdate", CargoUpdateTask.class, extension);
+        this.addCargoTask(tasks, "cargoBuild", CargoBuildTask.class, extension);
+        this.addCargoTask(tasks, "cargoClean", CargoCleanTask.class, extension);
+        this.addCargoTask(tasks, "cargoTest", CargoTestTask.class, extension);
     }
 
     private void addCargoTask(@NotNull final TaskContainer tasks, @NotNull final String name,
                               @NotNull final Class<? extends AbstractCargoTask> clazz, @NotNull final CargoPluginExtension extension) {
         tasks.register(name, clazz, task -> {
             task.setGroup(CargoPlugin.TASK_GROUP);
+            task.setDependsOn(List.of("cargoInit"));
             task.getEnvironmentVariables().set(extension.getEnvironmentVariables());
             task.getExecutable().set(extension.getExecutable());
             task.getSourceFolder().set(extension.getSourceFolder());

@@ -39,7 +39,6 @@ public class CargoInitTask extends DefaultTask {
         cargoTomlBuilder.append("name = \"").append(projectExtension.getProjectName().getOrElse(this.getProject().getName())).append("\"\n");
         cargoTomlBuilder.append("version = \"").append(projectExtension.getVersion().getOrElse(this.getProject().getVersion().toString())).append("\"\n");
         cargoTomlBuilder.append("\n");
-
         // Lib
         cargoTomlBuilder.append("[lib]\n");
         cargoTomlBuilder.append("crate-type = [\"cdylib\"]\n");
