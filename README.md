@@ -10,12 +10,5 @@ dependencies {
 ```
 After all these steps you create a `rust` folder in the `main` folder and you can start developing your modification.
 
-## Features of the Plugin
-This plugin provides the following tasks:
- - `cargoCleanup` - Cleanup the temporary build folder `build/cargo`
- - `cargoGenerate` - Generate a `Cargo.toml` and the wasm compile target definition by the definitions and dependencies in your `build.gradle`
- - `configureFabricResources` - This task copies your WASM source into the resources of your Fabric modification and inserts the `WasmRuntimeInitializer` as an entrypoint
- - `wasmBuild` - Builds the Rust part of your project to a WASM file
-
 ## Usage in Java and Rust
 At the moment, the Gradle plugin is too underdeveloped to use it in an environment. The instructions for the usage are coming soon.
