@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-public class AdjustResourcesTask extends DefaultTask {
+public class ConfigureFabricResourcesTask extends DefaultTask {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
