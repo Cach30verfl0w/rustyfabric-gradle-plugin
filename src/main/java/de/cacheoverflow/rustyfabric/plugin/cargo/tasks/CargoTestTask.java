@@ -1,9 +1,13 @@
 package de.cacheoverflow.rustyfabric.plugin.cargo.tasks;
 
-public class CargoTestTask extends AbstractCargoTask {
+import de.cacheoverflow.rustyfabric.plugin.utils.ProcessTask;
+
+import java.util.List;
+
+public class CargoTestTask extends ProcessTask {
 
     public CargoTestTask() {
-        super("test");
+        super("cargo", List.of("test"));
     }
 
 }

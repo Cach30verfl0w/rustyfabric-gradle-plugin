@@ -2,6 +2,7 @@ package de.cacheoverflow.rustyfabric.plugin.cargo;
 
 import de.cacheoverflow.rustyfabric.plugin.cargo.extension.CargoPluginExtension;
 import de.cacheoverflow.rustyfabric.plugin.cargo.tasks.*;
+import de.cacheoverflow.rustyfabric.plugin.utils.ProcessTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskContainer;
@@ -23,14 +24,14 @@ public class CargoPlugin implements Plugin<Project> {
             task.getWorkingFolder().set(extension.getWorkingFolder());
         });
 
-        this.addCargoTask(tasks, "cargoUpdate", CargoUpdateTask.class, extension);
-        this.addCargoTask(tasks, "cargoBuild", CargoBuildTask.class, extension);
-        this.addCargoTask(tasks, "cargoClean", CargoCleanTask.class, extension);
-        this.addCargoTask(tasks, "cargoTest", CargoTestTask.class, extension);
+        this.addProcessTask(tasks, "cargoUpdate", CargoUpdateTask.class, extension);
+        this.addProcessTask(tasks, "cargoBuild", CargoBuildTask.class, extension);
+        this.addProcessTask(tasks, "cargoClean", CargoCleanTask.class, extension);
+        this.addProcessTask(tasks, "cargoTest", CargoTestTask.class, extension);
     }
 
-    private void addCargoTask(@NotNull final TaskContainer tasks, @NotNull final String name,
-                              @NotNull final Class<? extends AbstractCargoTask> clazz, @NotNull final CargoPluginExtension extension) {
+    private void addProcessTask(@NotNull final TaskContainer tasks, @NotNull final String name,
+                              @NotNull final Class<? extends ProcessTask> clazz, @NotNull final CargoPluginExtension extension) {
         tasks.register(name, clazz, task -> {
             task.setGroup(CargoPlugin.TASK_GROUP);
             task.setDependsOn(List.of("cargoInit"));

@@ -1,4 +1,4 @@
-package de.cacheoverflow.rustyfabric.plugin.cargo.tasks;
+package de.cacheoverflow.rustyfabric.plugin.utils;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
@@ -13,38 +13,44 @@ import org.gradle.api.tasks.TaskAction;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class AbstractCargoTask extends DefaultTask {
+public class ProcessTask extends DefaultTask {
 
     private final MapProperty<String, String> environmentVariables;
     private final Property<String> executable;
     private final DirectoryProperty sourceFolder;
     private final DirectoryProperty workingFolder;
     private final Property<Boolean> releaseMode;
-    private final String cargoTask;
+    private final List<String> processArguments;
+    private final String defaultExecutableName;
 
-    public AbstractCargoTask(@NotNull final String cargoTask) {
+    public ProcessTask(@NotNull final String defaultExecutableName, @NotNull final List<String> processArguments) {
         ObjectFactory factory = this.getProject().getObjects();
         this.environmentVariables = factory.mapProperty(String.class, String.class);
         this.executable = factory.property(String.class);
         this.sourceFolder = factory.directoryProperty();
         this.workingFolder = factory.directoryProperty();
         this.releaseMode = factory.property(Boolean.class);
-        this.cargoTask = cargoTask;
+        this.processArguments = processArguments;
+        this.defaultExecutableName = defaultExecutableName;
     }
 
     @TaskAction
     public void performTask() {
         // Copy Source Directory into Working Directory
         this.getLogger().info("Copy Source Folder into Working Folder...");
-        this.copyDirectory(this.sourceFolder.getAsFile().get().toPath(), this.workingFolder.getAsFile().get().toPath());
+        File workingSource = new File(this.workingFolder.getAsFile().get(), "src");
+        workingSource.mkdirs();
+        this.copyDirectory(this.sourceFolder.getAsFile().get().toPath(), workingSource.toPath());
 
         // Run Process
         ProcessBuilder processBuilder = this.buildProcess();
@@ -60,26 +66,27 @@ public class AbstractCargoTask extends DefaultTask {
 
                     // Read error lines
                     if ((line = errorReader.readLine()) != null) {
-                        this.getLogger().info(line);
+                        this.getLogger().error(line);
                         while ((line = errorReader.readLine()) != null) {
-                            this.getLogger().info(line);
+                            this.getLogger().error(line);
                         }
                     }
 
                     // Wait for exit
                     int exitCode = process.waitFor();
                     if (exitCode != 0) {
-                        throw new GradleException(String.format("Cargo returned with error exit code %d", exitCode));
+                        throw new GradleException(String.format("%s returned with error exit code %d", this.defaultExecutableName, exitCode));
                     }
                 }
             }
         } catch (IOException | InterruptedException ex) {
-            throw new GradleException("Unable to run Cargo process", ex);
+            throw new GradleException("Unable to run " + this.defaultExecutableName + " process", ex);
         }
     }
 
     private @NotNull ProcessBuilder buildProcess() {
-        List<String> arguments = Arrays.asList(this.executable.getOrElse("cargo"), this.cargoTask);
+        List<String> arguments = new ArrayList<>(List.of(this.executable.getOrElse(this.defaultExecutableName)));
+        arguments.addAll(this.processArguments);
         ProcessBuilder processBuilder = new ProcessBuilder(arguments);
         processBuilder.environment().putAll(this.environmentVariables.getOrElse(new HashMap<>()));
         processBuilder.directory(this.workingFolder.getAsFile().get());
