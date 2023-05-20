@@ -59,8 +59,7 @@ public class CargoPluginExtension {
         } else if (parameters.containsKey("name") && parameters.containsKey("git")) {
             this.cargoDependencies.add(new GitCargoDependency((String) parameters.get("name"), (String) parameters.get("git"),
                     (List<String>) parameters.getOrDefault("features", new ArrayList<>())));
-        }
-        throw new GradleException("Invalid dependency specification " + parameters);
+        } else throw new GradleException("Invalid dependency specification " + parameters);
     }
 
     public void project(@NotNull final Action<CargoProjectExtension> action) {

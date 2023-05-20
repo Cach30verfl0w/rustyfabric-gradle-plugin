@@ -29,10 +29,27 @@ public class CargoInitTask extends DefaultTask {
 
     @TaskAction
     public void performTask() {
-        StringBuilder cargoTomlBuilder = new StringBuilder();
         if (!this.workingFolder.getAsFile().get().mkdirs())
             this.getLogger().info("Skipping working folder creation => Already existing!");
 
+        this.createCargoConfig();
+        this.createCargoToml();
+    }
+
+    private void createCargoConfig() {
+        String compileTarget = this.pluginExtension.getCargoProjectExtension().getCompileTarget().getOrElse("default");
+        if (compileTarget.equals("default"))
+            return;
+
+        File file = new File(this.workingFolder.getAsFile().get(), ".cargo/config");
+        if (!file.getParentFile().mkdirs())
+            this.getLogger().info("Skipping .cargo folder creation => Already existing!");
+
+        IOHelper.writeFile(file, "[build]\ntarget=\"" + this.pluginExtension.getCargoProjectExtension().getCompileTarget().get() + "\"\n");
+    }
+
+    private void createCargoToml() {
+        StringBuilder cargoTomlBuilder = new StringBuilder();
         CargoProjectExtension projectExtension = this.pluginExtension.getCargoProjectExtension();
         // Package Information
         cargoTomlBuilder.append("[package]\n");
