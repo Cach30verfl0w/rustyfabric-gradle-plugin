@@ -4,9 +4,6 @@ import org.gradle.api.GradleException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.stream.Collectors;
 
 public class IOHelper {
