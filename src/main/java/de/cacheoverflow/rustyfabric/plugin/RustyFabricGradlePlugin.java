@@ -26,7 +26,7 @@ public class RustyFabricGradlePlugin implements Plugin<Project> {
         project.getPlugins().apply(FabricRustPlugin.class);
 
         TaskContainer tasks = project.getTasks();
-        this.addDependToTask(tasks.getByName("classes"), new String[] { "configureFabricResources" });
+        this.addDependToTask(tasks.getByName("classes"), new String[] { "configureFabricResources", "generateWebAssemblyRuntime" });
     }
 
     private void addDependToTask(@NotNull final Task task, @NotNull final String[] dependTasks) {

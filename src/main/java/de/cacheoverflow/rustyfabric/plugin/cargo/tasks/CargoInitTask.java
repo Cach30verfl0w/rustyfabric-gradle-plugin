@@ -4,7 +4,7 @@ import de.cacheoverflow.rustyfabric.plugin.cargo.dependency.ICargoDependency;
 import de.cacheoverflow.rustyfabric.plugin.cargo.extension.CargoLibraryExtension;
 import de.cacheoverflow.rustyfabric.plugin.cargo.extension.CargoPluginExtension;
 import de.cacheoverflow.rustyfabric.plugin.cargo.extension.CargoProjectExtension;
-import de.cacheoverflow.rustyfabric.plugin.IOHelper;
+import de.cacheoverflow.rustyfabric.plugin.utils.IOHelper;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.model.ObjectFactory;

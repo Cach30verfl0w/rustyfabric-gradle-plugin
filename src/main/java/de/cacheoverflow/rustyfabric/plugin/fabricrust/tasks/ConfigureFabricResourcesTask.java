@@ -1,7 +1,7 @@
 package de.cacheoverflow.rustyfabric.plugin.fabricrust.tasks;
 
 import com.google.gson.*;
-import de.cacheoverflow.rustyfabric.plugin.IOHelper;
+import de.cacheoverflow.rustyfabric.plugin.utils.IOHelper;
 import de.cacheoverflow.rustyfabric.plugin.cargo.extension.CargoPluginExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
@@ -41,7 +41,7 @@ public class ConfigureFabricResourcesTask extends DefaultTask {
         }
 
         // Insert WASM runtime initializer into modification
-        mainNode.add("de.cacheoverflow.rustcraft.wasmruntime.WasmRuntimeInitializer");
+        mainNode.add("de.cacheoverflow.rustyfabric.wasmruntime.WasmRuntimeInitializer");
         mainNode.remove(JsonNull.INSTANCE);
         IOHelper.writeFile(fabricModDefinitionResource, GSON.toJson(object));
 

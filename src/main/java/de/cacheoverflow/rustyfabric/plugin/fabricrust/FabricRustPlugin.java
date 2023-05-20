@@ -1,6 +1,7 @@
 package de.cacheoverflow.rustyfabric.plugin.fabricrust;
 
 import de.cacheoverflow.rustyfabric.plugin.fabricrust.tasks.ConfigureFabricResourcesTask;
+import de.cacheoverflow.rustyfabric.plugin.fabricrust.tasks.codegen.WasmRuntimeCodeGenerationTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskContainer;
@@ -18,6 +19,10 @@ public class FabricRustPlugin implements Plugin<Project> {
         tasks.register("configureFabricResources", ConfigureFabricResourcesTask.class, task -> {
             task.setGroup(FabricRustPlugin.TASK_GROUP);
             task.setDependsOn(List.of("wasmBuild", "processResources"));
+        });
+
+        tasks.register("generateWebAssemblyRuntime", WasmRuntimeCodeGenerationTask.class, task -> {
+            task.setGroup(FabricRustPlugin.TASK_GROUP);
         });
     }
 

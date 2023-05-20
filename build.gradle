@@ -14,8 +14,13 @@ repositories {
 
 dependencies {
     implementation gradleApi()
+    implementation 'org.apache.commons:commons-compress:1.23.0'
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'com.google.code.gson:gson:2.10.1'
+
+    // ObjectWeb ASM Codegen
+    implementation 'org.ow2.asm:asm:9.5'
+    implementation 'org.ow2.asm:asm-tree:9.5'
 }
 
 gradlePlugin {
