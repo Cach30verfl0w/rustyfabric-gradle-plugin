@@ -1,6 +1,7 @@
 package de.cacheoverflow.rustyfabric.plugin.cargo.tasks;
 
 import de.cacheoverflow.rustyfabric.plugin.cargo.dependency.ICargoDependency;
+import de.cacheoverflow.rustyfabric.plugin.cargo.extension.CargoLibraryExtension;
 import de.cacheoverflow.rustyfabric.plugin.cargo.extension.CargoPluginExtension;
 import de.cacheoverflow.rustyfabric.plugin.cargo.extension.CargoProjectExtension;
 import de.cacheoverflow.rustyfabric.plugin.IOHelper;
@@ -56,9 +57,13 @@ public class CargoInitTask extends DefaultTask {
         cargoTomlBuilder.append("name = \"").append(projectExtension.getProjectName().getOrElse(this.getProject().getName())).append("\"\n");
         cargoTomlBuilder.append("version = \"").append(projectExtension.getVersion().getOrElse(this.getProject().getVersion().toString())).append("\"\n");
         cargoTomlBuilder.append("\n");
+
         // Lib
-        cargoTomlBuilder.append("[lib]\n");
-        cargoTomlBuilder.append("crate-type = [\"cdylib\"]\n");
+        CargoLibraryExtension cargoLibrary = projectExtension.getCargoLibrary();
+        if (!cargoLibrary.getType().get().equals("none")) {
+            cargoTomlBuilder.append("[lib]\n");
+            cargoTomlBuilder.append("crate-type = [\"").append(cargoLibrary.getType().get()).append("\"]\n");
+        }
 
         // Dependencies
         for (ICargoDependency dependency : this.pluginExtension.getCargoDependencies()) {
