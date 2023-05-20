@@ -1,6 +1,7 @@
 package de.cacheoverflow.rustyfabric.plugin;
 
 import de.cacheoverflow.rustyfabric.plugin.cargo.CargoPlugin;
+import de.cacheoverflow.rustyfabric.plugin.fabricrust.FabricRustPlugin;
 import de.cacheoverflow.rustyfabric.plugin.webassembly.WebAssemblyPlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -16,6 +17,7 @@ public class RustyFabricGradlePlugin implements Plugin<Project> {
         logger.info("Loading internal Cargo Plugin of RustyFabric...");
         project.getPlugins().apply(CargoPlugin.class);
         project.getPlugins().apply(WebAssemblyPlugin.class);
+        project.getPlugins().apply(FabricRustPlugin.class);
     }
 
 }
